@@ -1,0 +1,5 @@
+.container-fluid
+  .row
+    .col-md-12
+      h4 = model.collection.name
+selection-edit collection=model.collection

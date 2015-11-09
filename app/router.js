@@ -6,7 +6,10 @@ var Router = Ember.Router.extend({
 });
 
 Router.map(function() {
-  this.route('collection', { path: 'collections/:id' });
+  this.route('collection', { path: 'collections/:id' }, function(){
+    this.route('new-selection', { path: '/selections/new' });
+  });
+  this.route('selection', { path: 'selections/:id' });
 });
 
 export default Router;

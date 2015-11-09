@@ -1,0 +1,16 @@
+  .container.selection-new
+    .row
+      .col-md-4.col-md-offset-4
+        .card
+          .card-block
+            h2.card-title = selection.collection.name
+            ul
+              each s in selection.collection.selections
+                li= s.name
+            form submit="'save' selection"
+              fieldset.form-group
+                .input-group
+                  .input-group-addon @
+                  = input id="InputEmail"class="form-control" value=selection.email type="email" required="required" placeholder="Enter email"
+              button type="submit" class="btn btn-primary" = t 'selection.new.submit'
+

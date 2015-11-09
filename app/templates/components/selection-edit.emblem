@@ -1,0 +1,8 @@
+h1 test
+= collection.photos
+= collection.photos.length
+if collection
+  h3 before
+  / each p in collection.get('photos')
+  /   h1 = p.label
+  / h3 after

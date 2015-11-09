@@ -18,6 +18,9 @@ module.exports = function(environment) {
       // when it is created
     }
   };
+  ENV.i18n = {
+    defaultLocale: 'fr'
+  }
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
@@ -25,6 +28,11 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
+    ENV.contentSecurityPolicy= {
+      'style-src': "'self' 'unsafe-inline'",
+      'script-src': "'self' 'unsafe-eval' *",
+      'connect-src': "'self' *"
+    }
   }
 
   if (environment === 'test') {
