@@ -31,7 +31,8 @@ module.exports = function(environment) {
     ENV.contentSecurityPolicy= {
       'style-src': "'self' 'unsafe-inline'",
       'script-src': "'self' 'unsafe-eval' *",
-      'connect-src': "'self' *"
+      'connect-src': "'self' *",
+      'img-src': "'self' *"
     }
   }
 

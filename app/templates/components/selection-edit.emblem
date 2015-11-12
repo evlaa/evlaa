@@ -1,8 +1,1 @@
-h1 test
-if collection
-  h3 before
-  = collection.photos.length
-  ul
-    each collection.photos as |photo|
-      li = photo.url
-  h3 after
+photo-layout class="photo-layout" photos=selection.collection.photos zoom="0.1" margin="2"

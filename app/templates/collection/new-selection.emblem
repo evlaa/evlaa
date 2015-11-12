@@ -1,1 +1,4 @@
+.selection-new-photos
+  photo-layout class="photo-layout" photos=model.collection.photos zoom="0.2" margin="0"
+.background-overlay
 = selection-new selection=model new="new"
