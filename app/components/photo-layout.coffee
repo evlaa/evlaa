@@ -1,25 +1,27 @@
 `import Ember from 'ember';`
 `import $ from 'jquery';`
 
-
-
-
-
 PhotoLayout = Ember.Component.extend
   resized: ->
+    return if @get('view-width') == $(@element).width()
     @computeSize()
     @generateLayout()
+  scrolled: ->
+    @generateItems()
   created: Ember.on('didInsertElement', ->
     console.log 'new PhotoLayout !'
     @computeSize()
-    @generateLayout()
     @resize_listener = =>
       Ember.run.debounce(this, this.resized, 500)
+    @scroll_listener = =>
+      Ember.run.debounce(this, this.scrolled, 200)
     $(window).on('resize', @resize_listener)
+    $(window).on('scroll', @scroll_listener)
   )
   deleted: Ember.on('willDestroyElement', ->
     console.log 'delete PhotoLayout !'
     $(window).off('resize', @resize_listener)
+    $(window).off('scroll', @scroll_listener)
   )
   computeSize: ->
     # @set('margin', 2)
@@ -42,20 +44,28 @@ PhotoLayout = Ember.Component.extend
     )
     this.get('photos').then (photos)=>
       photos.forEach (photo)->
-        layout.add({
-          photo: photo
-          w: photo.get('width')
-          h: photo.get('height')
-        })
-      items = layout.getItems()
-      console.log items
-      this.set('items', items)
+        photo.w = photo.get('width')
+        photo.h = photo.get('height')
+        layout.add(photo)
+      @layout = layout
+      @generateItems()
+      @layout
+  generateItems: ->
+    return unless @layout
+    @position = Math.abs($(window).scrollTop() - $(@element).offset().top)
+    items = @layout.getItems(
+      @position - 2 * $(window).height()
+      @position + 3 * $(window).height()
+    )
+    console.log 'Item generated ! ' + items.length
+    this.set 'height', @layout.height()
+    this.set('items', items)
   observer: Ember.observer 'photos.[]', ->
     @generateLayout()
   actions:
-    click: (photo)->
-      console.log('click !')
-      this.sendAction('click', photo)
+    click: (item)->
+      console.log 'CLICK LAYOUT ! ', item
+      this.sendAction('click', item._object)
 
 `export default PhotoLayout;`
 
@@ -106,17 +116,11 @@ class Line
     return true if @calculate_ratio_with(object) <= @_layout.ratio_threshold()
     false
   ratio: ->
-    ratio_threshold = @_layout.ratio_threshold()
-    ratio = @ratio_with_margin(
+    @ratio_with_margin(
       @_objects_ratio,
       @_objects.length,
       @_layout._margin
     )
-    return ratio
-    if ratio > ratio_threshold
-      ratio
-    else
-      ratio_threshold
   height: ->
     return @_layout._width / @ratio()
   add: (object)->
@@ -128,6 +132,7 @@ class Line
     # console.log 'add', object, 'new_ratio_internal:', @_objects_ratio,
     # 'ratio', @ratio(), 'new_height', @height()
   getItems: (offset_y)->
+    return [] if @_objects.length == 0
     height = @height()
     items = []
     offset_x = 0

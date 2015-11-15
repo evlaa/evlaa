@@ -1,12 +1,3 @@
-each items as |item|
-  div.photo-layout-item style="left: {{item.x}}px; top: {{item.y}}px; width: {{item.w}}px; height: {{item.h}}px;"
-    div style="position: relative;"
-      img style="position: absolute;" src=item._object.photo.url width=item.w
-      /div style="color: blue; position: absolute; background: white;"
-        = item.x
-        span x
-        = item.y
-        span |
-        = item.w
-        span x
-        = item.h
+.photo-layout style="min-height: {{height}}px"
+  each items as |item|
+    photo-layout-image item=item class="photo-layout-item" click="click"

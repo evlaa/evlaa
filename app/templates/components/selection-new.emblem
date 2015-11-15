@@ -11,5 +11,5 @@
             fieldset.form-group
               .input-group
                 .input-group-addon @
-                = input id="InputEmail"class="form-control" value=selection.email type="email" required="required" placeholder="Enter email"
+                = input id="selection-new-email" class="form-control" value=selection.email type="email" required="required" placeholder="Enter email"
             button type="submit" class="btn btn-primary" disabled=loading = t 'selection.new.submit'

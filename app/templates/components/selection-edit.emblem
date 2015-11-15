@@ -1,1 +1,4 @@
-photo-layout class="photo-layout" photos=selection.collection.photos zoom="0.1" margin="2"
+if photo
+  h1 Hello World ?
+  // photo-viewer photo=photo
+photo-layout photos=selection.collection.photos zoom="0.25" margin="2" click="click"
