@@ -1,20 +1,26 @@
 `import Ember from 'ember'`
 
 PhotoLayoutImageComponent = Ember.Component.extend(
-  tagName: 'img'
-  created: Ember.on('didInsertElement', ->
-    @$element = @$(@element)
-    @$element.attr('width', @item.w)
-    @$element.attr('height', @item.h)
-    @$element.attr('style', "left: #{@item.x}px;top: #{@item.y}px;")
-    @click = =>
-      @sendAction('click', @item)
-    @$element.on 'click', @click
-  )
-  deleted: Ember.on('willDestroyElement', ->
-    console.log 'remove handler'
-    @$element.off 'click', @click
-  )
+#   tagName: 'img'
+#   classNames: [ 'photo-layout-image' ]
+#   # attributeBindings: [ 'src', 'width', 'height', 'style' ]
+#   # attributeBindings: [ 'src', 'width', 'height' ]
+#   photo: Ember.computed 'item', ->
+#     @item._object
+#   src: Ember.computed 'photo.url', ->
+#     @get('photo').get('url')
+#   width: Ember.computed 'item', ->
+#     console.log this
+#     @get('item').w
+#   height: Ember.computed 'item', ->
+#     @get('item').h
+#   style: Ember.computed 'item',  ->
+#     Ember.String.htmlSafe(
+#       "position: absolute;left: #{@get('item').x}px;top: #{@get('item').y}px;"
+#     )
+#   actions:
+#     click: ->
+#       alert 'ICI !'
 )
 
 `export default PhotoLayoutImageComponent`

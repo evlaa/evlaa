@@ -1,0 +1,19 @@
+.rating-bar
+  text-align: center
+.ratings
+  a
+    text-align: center
+  &.defined
+    a
+      color: yellow
+  a
+    width: 15%
+    display: inline-block
+    line-height: 40px
+    font-size: 20px
+  &.fill
+    &:hover
+      a
+        @extend .fa-star
+    &> a:hover ~ a:before
+      @extend .fa-star-o

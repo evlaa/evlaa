@@ -2,70 +2,41 @@
 `import $ from 'jquery';`
 
 PhotoLayout = Ember.Component.extend
-  resized: ->
-    return if @get('view-width') == $(@element).width()
-    @computeSize()
-    @generateLayout()
+  attributeBindings: [ 'style' ],
+  classNames: [ 'photo-layout' ]
   scrolled: ->
-    @generateItems()
+    @set('position', Math.abs($(window).scrollTop() - $(@element).offset().top))
   created: Ember.on('didInsertElement', ->
-    console.log 'new PhotoLayout !'
-    @computeSize()
-    @resize_listener = =>
-      Ember.run.debounce(this, this.resized, 500)
     @scroll_listener = =>
       Ember.run.debounce(this, this.scrolled, 200)
-    $(window).on('resize', @resize_listener)
     $(window).on('scroll', @scroll_listener)
   )
   deleted: Ember.on('willDestroyElement', ->
-    console.log 'delete PhotoLayout !'
-    $(window).off('resize', @resize_listener)
     $(window).off('scroll', @scroll_listener)
   )
-  computeSize: ->
-    # @set('margin', 2)
-    # @set('zoom', 0.5) #TODO default ?
-    @set('view-width', $(@element).width())
-    @set('view-height', $(window).height()) # TODO allow to constrain height ?
-  generateLayout: ->
-    console.log(
-      'new layout ',
-      @get('view-width'),
-      @get('view-height'),
-      @get('zoom'),
-      @get('margin')
-    )
+  layout: Ember.computed 'width', 'height', 'zoom', 'margin', 'photos.[]', ->
     layout = new Layout(
-      @get('view-width'),
-      @get('view-height'),
+      @get('width'),
+      @get('height'),
       @get('zoom')*1.0,
       @get('margin')*1
     )
-    this.get('photos').then (photos)=>
-      photos.forEach (photo)->
-        photo.w = photo.get('width')
-        photo.h = photo.get('height')
-        layout.add(photo)
-      @layout = layout
-      @generateItems()
-      @layout
-  generateItems: ->
-    return unless @layout
-    @position = Math.abs($(window).scrollTop() - $(@element).offset().top)
-    items = @layout.getItems(
-      @position - 2 * $(window).height()
-      @position + 3 * $(window).height()
+    @get('photos').forEach (photo)->
+      photo.w = photo.get('width')
+      photo.h = photo.get('height')
+      layout.add(photo)
+    layout
+
+  style: Ember.computed 'layout',  ->
+    return Ember.String.htmlSafe(
+      "position: relative;min-height: #{@get('layout').height()}px;"
     )
-    console.log 'Item generated ! ' + items.length
-    this.set 'height', @layout.height()
-    this.set('items', items)
-  observer: Ember.observer 'photos.[]', ->
-    @generateLayout()
-  actions:
-    click: (item)->
-      console.log 'CLICK LAYOUT ! ', item
-      this.sendAction('click', item._object)
+  items: Ember.computed 'position', 'layout', 'height', ->
+    return [] unless @get('layout')?
+    items = @get('layout').getItems(
+      @get('position') - 2 * @get('height')
+      @get('position') + 3 * @get('height')
+    )
 
 `export default PhotoLayout;`
 
@@ -129,8 +100,6 @@ class Line
     else
       @_objects_ratio += @object_ratio(object)
     @_objects.push(object)
-    # console.log 'add', object, 'new_ratio_internal:', @_objects_ratio,
-    # 'ratio', @ratio(), 'new_height', @height()
   getItems: (offset_y)->
     return [] if @_objects.length == 0
     height = @height()
@@ -141,10 +110,10 @@ class Line
       # item = new Item(object, offset_x, offset_y, width, height)
       item = new Item(
         object,
-        Math.round(offset_x),
-        Math.round(offset_y),
-        Math.round(width),
-        Math.round(height)
+        Math.floor(offset_x),
+        Math.floor(offset_y),
+        Math.floor(width),
+        Math.floor(height)
       )
       items.push(item)
       offset_x += width + @_layout._margin

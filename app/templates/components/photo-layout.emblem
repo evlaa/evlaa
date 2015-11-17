@@ -1,3 +1,2 @@
-.photo-layout style="min-height: {{height}}px"
-  each items as |item|
-    photo-layout-image item=item class="photo-layout-item" click="click"
+each items as |item|
+  yield item

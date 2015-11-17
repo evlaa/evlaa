@@ -1,4 +1,28 @@
+.container
+  .row
+    .col-md-4.col-md-offset-4
+      .card.card-margin-top.card-white
+        .card-block
+          if selection.collection.name
+            h2.card-title= selection.collection.name
+          else
+            h2.card-title= t 'loading'
+          p= t 'selection.edit.introduction'
+photo-layout photos=selection.collection.photos zoom="0.15" width=width height=height margin="5" as |item|
+  div-absolute left=item.x top=item.y width=item.w height=item.h
+    a.photo-layout-link click="'click' item._object" href=""
+    img-photo photo=item._object width=item.w height=item.h
 if photo
-  h1 Hello World ?
-  // photo-viewer photo=photo
-photo-layout photos=selection.collection.photos zoom="0.25" margin="2" click="click"
+  modal-fixed-scroll class="fixed-modal"
+    photo-viewer background="close" content_width=photo.width content_height=photo.height width=width height=viewer_height as |photo_viewer_width photo_viewer_height|
+      img-photo photo=photo width=photo_viewer_width height=photo_viewer_height
+    a.photo-viewer-next href="" click='next'
+    a.photo-viewer-previous href="" click='previous'
+    //.rating-bar
+      input-rating
+.container
+  .row
+    .col-md-4.col-md-offset-4
+      .card.card-margin-top.card-white
+        .card-block
+          a.btn.btn-primary.btn-block.btn-lg= t 'selection.edit.done'
