@@ -21,14 +21,14 @@ selectionEdit = Ember.Component.extend(
     $(window).off('resize', @resize_listener)
     $(window).off('scroll', @scroll_listener)
   )
-  index: Ember.computed 'photo', 'selection.collection.photos.[]', ->
-    console.log @get('selection.collection.photos').indexOf(@get('photo'))
-    @get('selection.collection.photos').indexOf(@get('photo'))
-
-  next: Ember.computed 'index', 'selection.collection.photos.[]', ->
-    @get('selection.collection.photos').objectAt(@get('index')+1)
-  previous: Ember.computed 'index', 'selection.collection.photos.[]', ->
-    @get('selection.collection.photos').objectAt(@get('index')-1)
+  photos: Ember.computed 'selection.collection.photos.[]', ->
+    @get('selection.collection.photos')
+  index: Ember.computed 'photo', 'photos.[]', ->
+    @get('photos').indexOf(@get('photo'))
+  next: Ember.computed 'index', 'photos.[]', ->
+    @get('photos').objectAt(@get('index')+1)
+  previous: Ember.computed 'index', 'photos.[]', ->
+    @get('photos').objectAt(@get('index')-1)
 
   viewer_height: Ember.computed 'height', ->
     # @get('height') - 44

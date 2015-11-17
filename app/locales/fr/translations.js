@@ -11,7 +11,6 @@ export default {
       'submit': 'Selectioner les photos'
     },
     'edit': {
-      'introduction': 'Hey, ...',
       'done': 'J\'ai fini !'
     }
   }
