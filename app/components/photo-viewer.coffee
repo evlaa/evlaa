@@ -40,7 +40,6 @@ PhotoViewerComponent = Ember.Component.extend(
     (@get('width') - @get('photo_width')) /2
   actions:
     background: ->
-      console.log @get('width'), @get('height')
       @sendAction 'background'
 
 )

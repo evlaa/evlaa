@@ -1,0 +1,4 @@
+if selected
+  i.fa.fa-star
+else
+  i.fa.fa-star-o

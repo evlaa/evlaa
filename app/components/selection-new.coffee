@@ -4,6 +4,14 @@ selectionNew =  Ember.Component.extend(
   created: Ember.on('didInsertElement', ->
     @$('#selection-new-email').focus()
   ),
+  init: ->
+    @_super()
+    @setSizes()
+  setSizes: ->
+    @set 'width', $(window).innerWidth()
+    @set 'height', $(window).innerHeight()
+  debouncedDidResize: ->
+    @setSizes()
   actions:
     save: ->
       this.set('loading', true)

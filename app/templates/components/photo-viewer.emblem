@@ -1,4 +1,4 @@
 .photo-viewer-wrapper
-  a.background-overlay href="" click="background"
+  a.background-transparent href="" click="background"
   div-absolute left=content_left top=content_top width=photo_width height=photo_height
     yield photo_width photo_height

@@ -6,15 +6,16 @@ PhotoLayout = Ember.Component.extend
   classNames: [ 'photo-layout' ]
   scrolled: ->
     @set('position', Math.abs($(window).scrollTop() - $(@element).offset().top))
-  created: Ember.on('didInsertElement', ->
+  init: ->
+    @_super()
     @scroll_listener = =>
-      Ember.run.debounce(this, this.scrolled, 200)
+      Ember.run.debounce(this, this.scrolled, 50)
     $(window).on('scroll', @scroll_listener)
-  )
   deleted: Ember.on('willDestroyElement', ->
     $(window).off('scroll', @scroll_listener)
   )
-  layout: Ember.computed 'width', 'height', 'zoom', 'margin', 'photos.[]', ->
+  layout: Ember.computed 'width', 'zoom', 'margin', 'photos.[]', ->
+    console.log 'generate layout ! '
     layout = new Layout(
       @get('width'),
       @get('height'),
@@ -25,7 +26,42 @@ PhotoLayout = Ember.Component.extend
       photo.w = photo.get('width')
       photo.h = photo.get('height')
       layout.add(photo)
-    layout
+    return layout
+
+  # generateLayout: ->
+  #   alert 'new layout ! '
+  #   layout = new Layout(
+  #     @get('width'),
+  #     @get('height'),
+  #     @get('zoom')*1.0,
+  #     @get('margin')*1
+  #   )
+  #   @get('photos').forEach (photo)->
+  #     photo.w = photo.get('width')
+  #     photo.h = photo.get('height')
+  #     layout.add(photo)
+  #   @set('layout', layout)
+  # changedPhotos: (photos, removeCount, added)->
+  #   console.log 'Changed Photos !'
+  #   if removeCount > 0
+  #     @generateLayout()
+  #     return
+  #   else
+  #     for photo in added
+  #       photo.w = photo.get('width')
+  #       photo.h = photo.get('height')
+  #       @get('layout').add(photo)
+  # willChangePhoto: ->
+  #   console.log 'Will Change ?'
+  # init: ->
+  #   @_super()
+  #   @generateLayout()
+  #   @get('photos').addEnumerableObserver(this,
+  #     willChange: @willChangePhoto
+  #     didChange: @changedPhotos
+  #   )
+  # layout: Ember.computed 'width', 'height', 'zoom', 'margin', 'photos.[]', ->
+  #   @generateLayout()
 
   style: Ember.computed 'layout',  ->
     return Ember.String.htmlSafe(
@@ -34,8 +70,8 @@ PhotoLayout = Ember.Component.extend
   items: Ember.computed 'position', 'layout', 'height', ->
     return [] unless @get('layout')?
     items = @get('layout').getItems(
-      @get('position') - 2 * @get('height')
-      @get('position') + 3 * @get('height')
+      @get('position') - 1 * @get('height')
+      @get('position') + 2 * @get('height')
     )
 
 `export default PhotoLayout;`

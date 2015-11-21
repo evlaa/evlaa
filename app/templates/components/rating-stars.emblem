@@ -1,0 +1,2 @@
+each indexes as |index|
+  rating-star rating=rating index=index class="btn btn-lg btn-control" click="select"

@@ -1,0 +1,9 @@
+photo-viewer background="close" content_width=photo.width content_height=photo.height width=width height=viewer_height as |photo_viewer_width photo_viewer_height|
+  img-photo photo=photo width=photo_viewer_width height=photo_viewer_height
+  link-to '' 'selection.photo' selection next class="link-absolute" replace=true
+link-to '' 'selection.photo' selection next class="photo-viewer-next" replace=true
+link-to '' 'selection.photo' selection previous class="photo-viewer-previous" replace=true
+link-to 'selection' selection class="btn btn-lg btn-control photo-viewer-close"
+  i.fa.fa-close
+if note
+  rating-stars class="photo-viewer-ratings" rating=note.note change="rate"
