@@ -55,6 +55,8 @@ $body-color:                 #fff
 // @import "bower_components/bootstrap/scss/utilities-responsive"
 
 @import "bower_components/font-awesome/scss/font-awesome"
+@import "bower_components/photoswipe/src/css/main"
+@import "bower_components/photoswipe/src/css/default-skin/default-skin"
 @import 'ratings'
 
 .card-margin-top
@@ -121,7 +123,8 @@ $body-color:                 #fff
   position: relative
 
 .photo-viewer-ratings
-  position: absolute
+  z-index: 99999;
+  position: fixed
   bottom: 0
   left: 0
   right: 0
@@ -131,4 +134,4 @@ $body-color:                 #fff
   @extend .btn-link
   color: $body-color
   @include hover-focus
-    color: $gray
+    color: $body-color

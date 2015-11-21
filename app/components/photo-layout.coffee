@@ -6,16 +6,20 @@ PhotoLayout = Ember.Component.extend
   classNames: [ 'photo-layout' ]
   scrolled: ->
     @set('position', Math.abs($(window).scrollTop() - $(@element).offset().top))
+  deleted: Ember.on('willDestroyElement', ->
+    $(window).off('scroll', @scroll_listener)
+  )
   init: ->
     @_super()
     @scroll_listener = =>
       Ember.run.debounce(this, this.scrolled, 50)
     $(window).on('scroll', @scroll_listener)
-  deleted: Ember.on('willDestroyElement', ->
-    $(window).off('scroll', @scroll_listener)
-  )
-  layout: Ember.computed 'width', 'zoom', 'margin', 'photos.[]', ->
-    console.log 'generate layout ! '
+    @generateLayout()
+  photo_changed: Ember.observer 'photos.[]', ->
+    Em.run.scheduleOnce 'afterRender', this, =>
+      @generateLayout()
+  generateLayout: ->
+    console.log 'Generate layout !'
     layout = new Layout(
       @get('width'),
       @get('height'),
@@ -23,46 +27,8 @@ PhotoLayout = Ember.Component.extend
       @get('margin')*1
     )
     @get('photos').forEach (photo)->
-      photo.w = photo.get('width')
-      photo.h = photo.get('height')
       layout.add(photo)
-    return layout
-
-  # generateLayout: ->
-  #   alert 'new layout ! '
-  #   layout = new Layout(
-  #     @get('width'),
-  #     @get('height'),
-  #     @get('zoom')*1.0,
-  #     @get('margin')*1
-  #   )
-  #   @get('photos').forEach (photo)->
-  #     photo.w = photo.get('width')
-  #     photo.h = photo.get('height')
-  #     layout.add(photo)
-  #   @set('layout', layout)
-  # changedPhotos: (photos, removeCount, added)->
-  #   console.log 'Changed Photos !'
-  #   if removeCount > 0
-  #     @generateLayout()
-  #     return
-  #   else
-  #     for photo in added
-  #       photo.w = photo.get('width')
-  #       photo.h = photo.get('height')
-  #       @get('layout').add(photo)
-  # willChangePhoto: ->
-  #   console.log 'Will Change ?'
-  # init: ->
-  #   @_super()
-  #   @generateLayout()
-  #   @get('photos').addEnumerableObserver(this,
-  #     willChange: @willChangePhoto
-  #     didChange: @changedPhotos
-  #   )
-  # layout: Ember.computed 'width', 'height', 'zoom', 'margin', 'photos.[]', ->
-  #   @generateLayout()
-
+    @set('layout', layout)
   style: Ember.computed 'layout',  ->
     return Ember.String.htmlSafe(
       "position: relative;min-height: #{@get('layout').height()}px;"

@@ -13,7 +13,8 @@
     "loader.js": "ember-cli/loader.js#3.2.1",
     "qunit": "~1.18.0",
     "bootstrap": "v4.0.0-alpha",
-    "font-awesome": "~4.4.0"
+    "font-awesome": "~4.4.0",
+    "photoswipe": "4.1.0"
   },
   "resolutions": {
     "ember": "^2.0.0"
