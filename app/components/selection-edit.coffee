@@ -11,8 +11,20 @@ selectionEdit = Ember.Component.extend(ResizeAware,
     @set 'height', $(window).innerHeight()
   debouncedDidResize: ->
     @setSizes()
-  photos: Ember.computed 'selection.collection.photos.[]', ->
-    @get('selection.collection.photos')
+  notes_filtered: Ember.computed 'note_filter', 'selection.notes.@each.note', ->
+    @get('selection.notes').filter (note)=>
+      note.get('note') == @get('note_filter')
+  photos: Ember.computed(
+    'notes_filtered.[]',
+    'note_filter',
+    'selection.collection.photos.[]',
+    ->
+      if @get('note_filter')?
+        @get('notes_filtered').map (note)->
+          note.get('photo').content
+      else
+        @get('selection.collection.photos')
+  )
   index: Ember.computed 'photo', 'photos.[]', ->
     @get('photos').indexOf(@get('photo'))
   photo_next: Ember.computed 'photos', 'index', ->
@@ -21,10 +33,8 @@ selectionEdit = Ember.Component.extend(ResizeAware,
     return null unless @get('photo')
     return @get('selection').note_for(@get('photo'))
   actions:
-    rate: (rating)->
-      @get('note').then (note)->
-        note.set('note', rating)
-        note.save()
+    note: (value, old_value)->
+      @get('note').content.save()
     click: (photo)->
       @set('photo', photo)
 )

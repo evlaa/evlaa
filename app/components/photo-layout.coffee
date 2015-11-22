@@ -4,22 +4,26 @@
 PhotoLayout = Ember.Component.extend
   attributeBindings: [ 'style' ],
   classNames: [ 'photo-layout' ]
+  init: ->
+    @_super()
+    @scroll_listener = =>
+      Ember.run.debounce(this, this.scrolled, 50)
+    Em.run.scheduleOnce 'afterRender', this, =>
+      @generateLayout()
+    $(window).on('scroll', @scroll_listener)
   scrolled: ->
     @set('position', Math.abs($(window).scrollTop() - $(@element).offset().top))
   deleted: Ember.on('willDestroyElement', ->
     $(window).off('scroll', @scroll_listener)
   )
-  init: ->
-    @_super()
-    @scroll_listener = =>
-      Ember.run.debounce(this, this.scrolled, 50)
-    $(window).on('scroll', @scroll_listener)
-    @generateLayout()
-  photo_changed: Ember.observer 'photos.[]', ->
+  width_changed: Ember.observer 'width', ->
+    Em.run.scheduleOnce 'afterRender', this, =>
+      @generateLayout()
+  photo_changed: Ember.observer 'photos', ->
     Em.run.scheduleOnce 'afterRender', this, =>
       @generateLayout()
   generateLayout: ->
-    console.log 'Generate layout !'
+    console.log '=> Generate layout !'
     layout = new Layout(
       @get('width'),
       @get('height'),
@@ -30,16 +34,16 @@ PhotoLayout = Ember.Component.extend
       layout.add(photo)
     @set('layout', layout)
   style: Ember.computed 'layout',  ->
+    return Ember.String.htmlSafe('') unless @get('layout')
     return Ember.String.htmlSafe(
       "position: relative;min-height: #{@get('layout').height()}px;"
     )
-  items: Ember.computed 'position', 'layout', 'height', ->
+  items: Ember.computed 'position', 'layout', ->
     return [] unless @get('layout')?
     items = @get('layout').getItems(
       @get('position') - 1 * @get('height')
       @get('position') + 2 * @get('height')
     )
-
 `export default PhotoLayout;`
 
 class Layout

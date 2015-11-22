@@ -3,6 +3,10 @@
 Route = Ember.Route.extend(
   model: (params)->
     promise = this.store.find('selection', params.selection_id)
+    this.store.query_paginated(
+      'note',
+      { selection_id: params.selection_id }
+    )
     promise.then (selection)=>
       this.store.query_paginated(
         'photo',

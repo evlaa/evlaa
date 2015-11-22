@@ -3,7 +3,6 @@
 PhotoSwipeComponent = Ember.Component.extend(
   init: ->
     @_super()
-    console.log 'new Photoswipe :-D'
   photo_changed: Ember.observer 'photo', ->
     return @display(@get('photo')) if @get('photo')?
     console.log 'Photo changed but empty !'
@@ -46,9 +45,6 @@ PhotoSwipeComponent = Ember.Component.extend(
       @set 'photo'
       @set 'photoswipe'
     photoswipe.listen 'afterChange', =>
-      console.log 'After Change ?'
-      console.log @photoswipe_index()
-      console.log @photoswipe_current()
       @set('photo', @photoswipe_current())
 )
 

@@ -2,6 +2,7 @@
 
 ImgPhotoComponent = Ember.Component.extend(
   tagName: 'img'
+  classNames: [ 'img-photo' ]
   attributeBindings: [ 'src', 'width', 'height']
   src: Ember.computed 'photo.url', ->
     @get('photo').get('url')

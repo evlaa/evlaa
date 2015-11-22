@@ -1,3 +1,6 @@
+.ratings-bar-wrapper
+  .ratings-bar
+    rating-stars class="ratings-filter" rating=note_filter clear_on_click=true
 .container
   .row
     .col-md-4.col-md-offset-4
@@ -11,13 +14,18 @@ photo-layout photos=photos zoom="0.15" width=width height=height margin="5" as |
   div-absolute left=item.x top=item.y width=item.w height=item.h
     a.link-absolute click="'click' item._object" href=""
     img-photo photo=item._object width=item.w height=item.h
-if photos
+/ if photos
   .container
     .row
       .col-md-4.col-md-offset-4
         .card.card-margin-top.card-white
           .card-block
             a.btn.btn-primary.btn-block.btn-lg= t 'selection.edit.done'
+.total-indicator
+  = photos.length
+  if note_filter
+    `  /
+    = selection.collection.photos.length
 photo-swipe photo=photo photos=photos
 if note
-  rating-stars class="photo-viewer-ratings" rating=note.note change="rate"
+  rating-stars class="photo-viewer-ratings" rating=note.note change="note"
