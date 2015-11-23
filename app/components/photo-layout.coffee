@@ -7,7 +7,7 @@ PhotoLayout = Ember.Component.extend
   init: ->
     @_super()
     @scroll_listener = =>
-      Ember.run.debounce(this, this.scrolled, 50)
+      Ember.run.throttle(this, this.scrolled, 200)
     Em.run.scheduleOnce 'afterRender', this, =>
       @generateLayout()
     $(window).on('scroll', @scroll_listener)
