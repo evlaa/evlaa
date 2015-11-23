@@ -16,11 +16,9 @@ PhotoSwipeComponent = Ember.Component.extend(
       showHideOpacity: false
       getThumbBoundsFn: (index)=>
         photo = @get('photos').objectAt(index)
-        # photo_id = @get('photo').get('id')
         $photo = $(".photo-layout-image[data-id=#{photo.get('id')}]") if photo
         if photo && $photo.length > 0
           position = $photo.offset()
-          console.log position
           return {
             x: position.left,
             y: position.top,
