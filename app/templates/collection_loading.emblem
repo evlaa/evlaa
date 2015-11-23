@@ -1,9 +1,0 @@
-.background-overlay
-.container
-  .row
-    .col-md-4.col-md-offset-4
-      .card.card-margin-top.card-white
-        .card-block
-          h2.card-title = t 'welcome'
-          p
-            span = t 'loading'

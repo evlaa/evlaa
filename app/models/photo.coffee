@@ -8,6 +8,7 @@ Model = DS.Model.extend({
     @w = @get('width')
     @h = @get('height')
     @src = @get('url')
+    @msrc = @get('url')
   collection: DS.belongsTo('collection'),
   notes: DS.hasMany('notes'),
   url: DS.attr('string'),

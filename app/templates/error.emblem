@@ -1,2 +1,5 @@
-h2 Error
-p = model
+.container
+  .row
+    .col-md-12
+      h2.text-center Error
+      p = model

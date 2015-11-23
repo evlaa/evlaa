@@ -3,24 +3,16 @@
     rating-stars class="ratings-filter" rating=note_filter clear_on_click=true
 .container
   .row
-    .col-md-4.col-md-offset-4
-      .card.card-margin-top.card-white
-        .card-block
-          if selection.collection.name
-            h2.card-title= selection.collection.name
-          else
-            h2.card-title= t 'loading'
+    .col-md-12
+      h1.collection-title
+        if selection.collection.name
+          = selection.collection.name
+        else
+          = t 'loading'
 photo-layout photos=photos zoom="0.15" width=width height=height margin="5" as |item|
   div-absolute left=item.x top=item.y width=item.w height=item.h
     a.link-absolute click="'click' item._object" href=""
-    img-photo photo=item._object width=item.w height=item.h
-/ if photos
-  .container
-    .row
-      .col-md-4.col-md-offset-4
-        .card.card-margin-top.card-white
-          .card-block
-            a.btn.btn-primary.btn-block.btn-lg= t 'selection.edit.done'
+    img-photo class="photo-layout-image" photo=item._object width=item.w height=item.h
 .total-indicator
   = photos.length
   if note_filter
@@ -29,3 +21,8 @@ photo-layout photos=photos zoom="0.15" width=width height=height margin="5" as |
 photo-swipe photo=photo photos=photos
 if note
   rating-stars class="photo-viewer-ratings" rating=note.note change="note"
+/ if photos
+  .container
+    .row
+      .col-md-12
+        a.btn.btn-primary.btn-block.btn-lg= t 'selection.edit.done'

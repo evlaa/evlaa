@@ -14,10 +14,25 @@ PhotoSwipeComponent = Ember.Component.extend(
       history: false
       index: @get('index')
       showHideOpacity: false
-      getThumbBoundsFn: (index)->
-        return { x: 0, y: 0, w: 20 }
-      showAnimationDuration: 0
-      hideAnimationDuration: 0
+      getThumbBoundsFn: (index)=>
+        photo = @get('photos').objectAt(index)
+        # photo_id = @get('photo').get('id')
+        $photo = $(".photo-layout-image[data-id=#{photo.get('id')}]") if photo
+        if photo && $photo.length > 0
+          position = $photo.offset()
+          console.log position
+          return {
+            x: position.left,
+            y: position.top,
+            w: $photo.width()
+          }
+        return {
+          x: $(window).innerWidth()/2,
+          y: $(window).innerHeight()/2 + $(window).scrollTop(),
+          w: 1
+        }
+      # showAnimationDuration: 200
+      # hideAnimationDuration: 200
     }
   items: Ember.computed 'photos', ->
     items = []

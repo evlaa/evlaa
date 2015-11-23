@@ -5,16 +5,13 @@
 .background-overlay
 .container
   .row
+    .col-md-12
+      h1.collection-title = selection.collection.name
+  .row
     .col-md-4.col-md-offset-4
-      .card.card-margin-top.card-white
-        .card-block
-          h2.card-title = selection.collection.name
-          ul
-            each s in selection.collection.selections
-              li= s.name
-          form submit="'save' selection"
-            fieldset.form-group
-              .input-group
-                .input-group-addon @
-                = input id="selection-new-email" class="form-control" value=selection.email type="email" required="required" placeholder=(t 'placeholders.email')
-            button type="submit" class="btn btn-primary" disabled=loading = t 'selection.new.submit'
+      form submit="'save' selection"
+        fieldset.form-group
+          .input-group
+            .input-group-addon @
+            = input id="selection-new-email" class="form-control" value=selection.email type="email" required="required" placeholder=(t 'placeholders.email')
+        button type="submit" class="btn btn-primary btn-lg btn-block" disabled=loading = t 'selection.new.submit'
