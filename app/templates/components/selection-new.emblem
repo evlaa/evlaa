@@ -1,5 +1,5 @@
 .selection-new-photos
-  photo-layout photos=selection.collection.photos zoom="0.25" width=width height=height margin="5" as |item|
+  photo-layout photos=selection.collection.photos zoom="0.20" width=width height=height margin="5" as |item|
     div-absolute left=item.x top=item.y width=item.w height=item.h
       img-photo photo=item._object width=item.w height=item.h
 .background-overlay

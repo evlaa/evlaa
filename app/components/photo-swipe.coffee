@@ -5,7 +5,6 @@ PhotoSwipeComponent = Ember.Component.extend(
     @_super()
   photo_changed: Ember.observer 'photo', ->
     return @display(@get('photo')) if @get('photo')?
-    console.log 'Photo changed but empty !'
     #!TODO Close !
   index: Ember.computed 'photo', 'photos', ->
     @get('photos').indexOf(@get('photo'))

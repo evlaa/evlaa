@@ -1,2 +1,5 @@
 each items as |item|
   yield item
+if loading
+  .photo-layout-loading
+    .fa.fa-spinner.fa-spin

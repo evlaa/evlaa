@@ -7,23 +7,45 @@ PhotoLayout = Ember.Component.extend
   init: ->
     @_super()
     @scroll_listener = =>
-      Ember.run.throttle(this, this.scrolled, 200)
-    Em.run.scheduleOnce 'afterRender', this, =>
-      @generateLayout()
-    $(window).on('scroll', @scroll_listener)
-  scrolled: ->
-    @set('position', Math.abs($(window).scrollTop() - $(@element).offset().top))
+      Ember.run.debounce(this, @set_items, 20)
+    $(window).scroll(@scroll_listener)
+    @new_layout()
   deleted: Ember.on('willDestroyElement', ->
     $(window).off('scroll', @scroll_listener)
   )
   width_changed: Ember.observer 'width', ->
-    Em.run.scheduleOnce 'afterRender', this, =>
-      @generateLayout()
+    @set('layout', null)
+    @set_items()
+    @new_layout()
   photo_changed: Ember.observer 'photos', ->
-    Em.run.scheduleOnce 'afterRender', this, =>
-      @generateLayout()
+    @new_layout()
+  process_photo_queue: ->
+    for [1..10]
+      photo = @photo_queue.shift()
+      if photo?
+        @future_layout.add(photo)
+      else
+        @set('loading', false)
+        @set('layout', @future_layout)
+        @set_items()
+        return
+    setTimeout((=>
+      @process_photo_queue()
+    ), 0)
+  new_layout: ->
+    previous_loading = @get('loading')
+    @set('loading', true)
+    @future_layout = new Layout(
+      @get('width'),
+      @get('height'),
+      @get('zoom')*1.0,
+      @get('margin')*1
+    )
+    @photo_queue =  []
+    @get('photos').forEach (photo)=>
+      @photo_queue.push(photo)
+    @process_photo_queue() unless previous_loading
   generateLayout: ->
-    console.log '=> Generate layout !'
     layout = new Layout(
       @get('width'),
       @get('height'),
@@ -38,12 +60,20 @@ PhotoLayout = Ember.Component.extend
     return Ember.String.htmlSafe(
       "position: relative;min-height: #{@get('layout').height()}px;"
     )
-  items: Ember.computed 'position', 'layout', ->
-    return [] unless @get('layout')?
-    items = @get('layout').getItems(
-      @get('position') - 1 * @get('height')
-      @get('position') + 2 * @get('height')
+  position: ->
+    position = 0
+    if @element
+      position = Math.abs($(window).scrollTop() - $(@element).offset().top)
+  set_items: ->
+    # start = new Date().getTime()
+    return @set('items', []) unless @get('layout')?
+    position = @position()
+    @set 'items', @get('layout').getItems(
+      position - 0.5 * @get('height')
+      position + 1.5 * @get('height')
     )
+    # time = new Date().getTime() - start
+    # console.log 'set_items !', time
 `export default PhotoLayout;`
 
 class Layout
@@ -83,7 +113,6 @@ class Layout
       height += line.height()
     height += (@_lines.length - 1) * @_margin
     height
-
 
 class Line
   constructor: (@_layout)->
